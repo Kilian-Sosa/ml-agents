@@ -6,6 +6,8 @@ using Unity.MLAgents.Actuators;
 public class MoveToGoalAgent : Agent {
     [SerializeField] Transform target;
     [SerializeField] float speed;
+    [SerializeField] Renderer rend;
+    [SerializeField] Material lose, win;
 
     public override void OnEpisodeBegin() {
         transform.position = Vector3.zero;
@@ -27,5 +29,18 @@ public class MoveToGoalAgent : Agent {
         ActionSegment<float> continousActions = actionsOut.ContinuousActions;
         continousActions[0] = Input.GetAxisRaw("Horizontal");
         continousActions[1] = Input.GetAxisRaw("Vertical");
+    }
+
+    void OnTriggerEnter(Collider collider) {
+        if (collider.CompareTag("wall")) {
+            rend.material = lose;
+            SetReward(-1);
+            EndEpisode();
+        }
+        if (collider.CompareTag("goal")) {
+            rend.material = win;
+            SetReward(+1);
+            EndEpisode();
+        }
     }
 }
