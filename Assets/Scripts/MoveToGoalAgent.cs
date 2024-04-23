@@ -10,19 +10,19 @@ public class MoveToGoalAgent : Agent {
     [SerializeField] Material lose, win;
 
     public override void OnEpisodeBegin() {
-        transform.position = Vector3.zero;
+        transform.localPosition = Vector3.zero;
     }
 
     public override void CollectObservations(VectorSensor sensor) {
-        sensor.AddObservation(transform.position);
-        sensor.AddObservation(target.position);
+        sensor.AddObservation(transform.localPosition);
+        sensor.AddObservation(target.localPosition);
     }
 
     public override void OnActionReceived(ActionBuffers actions) {
         float moveX = actions.ContinuousActions[0];
         float moveZ = actions.ContinuousActions[1];
 
-        transform.position += new Vector3(moveX, 0, moveZ) * speed * Time.deltaTime;
+        transform.localPosition += new Vector3(moveX, 0, moveZ) * speed * 2 * Time.deltaTime;
     }
 
     public override void Heuristic(in ActionBuffers actionsOut) {
